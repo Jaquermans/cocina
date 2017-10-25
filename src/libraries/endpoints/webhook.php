@@ -10,8 +10,10 @@
         {
             if($req->isPost()){
                 return $this->processPost($req->getParsedBody());
-            }
-            return 'Que tranza compa?';
+            } /*elseif ($req->isGet()) {
+                # code...
+            }*/
+            return 'Invalid Request';
         }
 
         private function processPost($body)
@@ -23,4 +25,5 @@
                 return $webhookEvent.' & EVENT_RECEIVED';
             }
         }
+
     }
