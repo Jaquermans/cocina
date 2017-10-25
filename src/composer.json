@@ -17,9 +17,9 @@
         "slim/slim": "^3.8",
         "monolog/monolog": "^1.23"
     },
-    "auotoload" : {
-        "psr-4" : {
-            "cocina" : "librarires/"
+    "autoload":{
+        "psr-4":{
+            "cocina\\":"libraries/"
         }
     },
     "require-dev": {
