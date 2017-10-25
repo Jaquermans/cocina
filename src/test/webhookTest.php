@@ -26,9 +26,16 @@
                 'REQUEST_URI'    => '/webhook',
                 'CONTENT_TYPE'   => 'application/json',
             ]);
-            $data = array(
+            $data = [
                 'object'=>'page',
-            );
+                'entry'=>[
+                    [
+                        'messaging'=>[
+                            ['message'=>'TEST_MESSAGE']
+                        ]
+                    ]
+                ],
+            ];
             $body = new RequestBody();
             $body->write(json_encode($data));
             $req = Request::createFromEnvironment($env)->withBody($body);
@@ -40,6 +47,6 @@
 
             //Test 2
             $result = json_decode($response->getBody()->__toString(), true);
-            $this->assertEquals('EVENT_RECEIVED',$result);
+            $this->assertEquals('TEST_MESSAGE & EVENT_RECEIVED',$result);
         }
     }

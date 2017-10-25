@@ -17,7 +17,10 @@
         private function processPost($body)
         {
             if($body['object']==='page'){
-                return 'EVENT_RECEIVED';
+                foreach($body['entry'] as $entry){
+                    $webhookEvent = $entry['messaging'][0]['message'];
+                }
+                return $webhookEvent.' & EVENT_RECEIVED';
             }
         }
     }
