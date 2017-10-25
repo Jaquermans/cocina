@@ -1,9 +1,9 @@
 <?php
     declare(strict_types=1);
-    namespace cocina\production;//General namespace
+    namespace cocina\test;//General namespace
     use cocina\abstractApp;
 
-    final class app extends abstractApp
+    final class testApp extends abstractApp
     {
         public function __construct()
         {
