@@ -53,7 +53,7 @@
         public function testVerifyWebhook()
         {
             $env = Environment::mock([
-                'REQUEST_METHOD' => 'POST',
+                'REQUEST_METHOD' => 'GET',
                 'REQUEST_URI'    => '/webhook',
                 'QUERY_STRING' => 'hub.verify_token=1234&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe',
                 'CONTENT_TYPE'   => 'application/json',
@@ -61,13 +61,13 @@
             $body = new RequestBody();
             $req = Request::createFromEnvironment($env)->withBody($body);
             $this->app->getContainer()['request'] = $req;//Include the Request in the App
-            $response = $this->app->run();//TRUE is to hide body
+            $response = $this->app->run(TRUE);//TRUE is to hide body
 
             //Test 1
             $this->assertSame($response->getStatusCode(), 200);
 
             //Test 2
             $result = json_decode($response->getBody()->__toString(), true);
-            $this->assertEquals('WEBHOOK_VERIFIED',$result);
+            $this->assertEquals('CHALLENGE_ACCEPTED',$result);
         }
     }

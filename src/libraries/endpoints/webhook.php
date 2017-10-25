@@ -10,9 +10,9 @@
         {
             if($req->isPost()){
                 return $this->processPost($req->getParsedBody());
-            } /*elseif ($req->isGet()) {
-                # code...
-            }*/
+            } elseif ($req->isGet()) {
+                return $this->verifyToken($req->getQueryParams());
+            }
             return 'Invalid Request';
         }
 
@@ -26,4 +26,14 @@
             }
         }
 
+        private function verifyToken($params)
+        {
+            $verify_token = '1234';
+
+            if(isset($params['hub_mode']) && $params['hub_verify_token']){
+                if($params['hub_mode']==='subscribe' && $params['hub_verify_token']===$verify_token){
+                    return $params['hub_challenge'];
+                }
+            }
+        }
     }
