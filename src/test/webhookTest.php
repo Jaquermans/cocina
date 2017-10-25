@@ -43,11 +43,42 @@
             $response = $this->app->run(TRUE);//TRUE is to hide body
 
             //Test 1
-            $this->assertSame($response->getStatusCode(), 200);
+            $this->assertSame(200,$response->getStatusCode());
 
             //Test 2
             $result = json_decode($response->getBody()->__toString(), true);
             $this->assertEquals('TEST_MESSAGE & EVENT_RECEIVED',$result);
+        }
+
+        public function testMessageObjectNotPage()
+        {
+            $env = Environment::mock([
+                'REQUEST_METHOD' => 'POST',
+                'REQUEST_URI'    => '/webhook',
+                'CONTENT_TYPE'   => 'application/json',
+            ]);
+            $data = [
+                'object'=>'something',
+                'entry'=>[
+                    [
+                        'messaging'=>[
+                            ['message'=>'TEST_MESSAGE']
+                        ]
+                    ]
+                ],
+            ];
+            $body = new RequestBody();
+            $body->write(json_encode($data));
+            $req = Request::createFromEnvironment($env)->withBody($body);
+            $this->app->getContainer()['request'] = $req;//Include the Request in the App
+            $response = $this->app->run(TRUE);//TRUE is to hide body
+
+            //Test 1
+            $this->assertSame(404,$response->getStatusCode());
+
+            //Test 2
+            $result = json_decode($response->getBody()->__toString(), true);
+            $this->assertEquals(NULL,$result);
         }
 
         public function testVerifyWebhook()
@@ -64,7 +95,7 @@
             $response = $this->app->run(TRUE);//TRUE is to hide body
 
             //Test 1
-            $this->assertSame($response->getStatusCode(), 200);
+            $this->assertSame(200,$response->getStatusCode());
 
             //Test 2
             $result = json_decode($response->getBody()->__toString(), true);
