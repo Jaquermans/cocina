@@ -4,6 +4,7 @@
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Message\ResponseInterface as Response;
     use cocina\endpoints\message;
+    use cocina\endpoints\webhook;
 
     abstract class abstractApp
     {
@@ -46,6 +47,9 @@
             $this->container['message'] = function($c){
                 return new message();
             };
+            $this->container['webhook'] = function($c){
+                return new webhook();
+            };
         }
 
         private function setRoutes()
@@ -53,7 +57,7 @@
             $this->app->map(['GET','POST'],'/{endpoint}[/{params:.*}]', function (Request $request, Response $response) {
                 $endpoint = $request->getAttribute('endpoint');
                 if($this->has($endpoint)) {
-                    $data = $this->$endpoint->processReq();
+                    $data = $this->$endpoint->processReq($request);
                 }
                 $newResponse = $response->withHeader('Content-type', 'application/json');
                 $newResponse = $response->withJson($data);
