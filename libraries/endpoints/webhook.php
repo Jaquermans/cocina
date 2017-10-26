@@ -32,7 +32,7 @@
 
             if(isset($params['hub_mode']) && $params['hub_verify_token']){
                 if($params['hub_mode']==='subscribe' && $params['hub_verify_token']===$verify_token){
-                    return array(200,$params['hub_challenge']);
+                    return array(200,intval($params['hub_challenge']));
                 } else {
                     return array(403,NULL);
                 }
