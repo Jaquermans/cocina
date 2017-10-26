@@ -28,7 +28,7 @@
 
         private function verifyToken(array $params)
         {
-            $verify_token = '1234';
+            $verify_token = '6T5CFraRWewxkWeb';
 
             if(isset($params['hub_mode']) && $params['hub_verify_token']){
                 if($params['hub_mode']==='subscribe' && $params['hub_verify_token']===$verify_token){
