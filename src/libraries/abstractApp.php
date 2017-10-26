@@ -55,12 +55,14 @@
         private function setRoutes()
         {
             $this->app->map(['GET','POST'],'/{endpoint}[/{params:.*}]', function (Request $request, Response $response) {
+                $newResponse = $response->withHeader('Content-type', 'application/json');
                 $endpoint = $request->getAttribute('endpoint');
                 if($this->has($endpoint)) {
                     list($status,$data) = $this->$endpoint->processReq($request);
+                    $newResponse = $response->withJson($data,$status);
+                } else {
+                    $newResponse = $response->withJson('Invalid Endpoint',404);
                 }
-                $newResponse = $response->withHeader('Content-type', 'application/json');
-                $newResponse = $response->withJson($data,$status);
                 return $newResponse;
             });
         }

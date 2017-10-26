@@ -3,6 +3,7 @@
     namespace cocina\endpoints;
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Message\ResponseInterface as Response;
+    use Slim\Http\RequestBody as Body;
 
     final class webhook
     {
@@ -16,7 +17,7 @@
             return array(404,'Invalid Request');
         }
 
-        private function processPost($body)
+        private function processPost(array $body)
         {
             if($body['object']==='page'){
                 foreach($body['entry'] as $entry){
@@ -27,7 +28,7 @@
             return array(404,NULL);
         }
 
-        private function verifyToken($params)
+        private function verifyToken(array $params)
         {
             $verify_token = '1234';
 
