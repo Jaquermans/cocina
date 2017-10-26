@@ -13,7 +13,7 @@
             } elseif ($req->isGet()) {
                 return $this->verifyToken($req->getQueryParams());
             }
-            return 'Invalid Request';
+            return array(404,'Invalid Request');
         }
 
         private function processPost($body)
@@ -22,8 +22,9 @@
                 foreach($body['entry'] as $entry){
                     $webhookEvent = $entry['messaging'][0]['message'];
                 }
-                return $webhookEvent.' & EVENT_RECEIVED';
+                return array(200,$webhookEvent.' & EVENT_RECEIVED');
             }
+            return array(404,NULL);
         }
 
         private function verifyToken($params)
@@ -32,7 +33,9 @@
 
             if(isset($params['hub_mode']) && $params['hub_verify_token']){
                 if($params['hub_mode']==='subscribe' && $params['hub_verify_token']===$verify_token){
-                    return $params['hub_challenge'];
+                    return array(200,$params['hub_challenge']);
+                } else {
+                    return array(403,NULL);
                 }
             }
         }

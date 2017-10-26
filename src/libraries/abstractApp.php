@@ -37,7 +37,7 @@
         private function setLogger($c)
         {
             $logger = new \Monolog\Logger('cocina_logger');
-            $file_handler = new \Monolog\Handler\StreamHandler(__DIR__.'../logs/app.log');
+            $file_handler = new \Monolog\Handler\StreamHandler(__DIR__.'/../logs/app.log');
             $logger->pushHandler($file_handler);
             return $logger;
         }
@@ -57,10 +57,10 @@
             $this->app->map(['GET','POST'],'/{endpoint}[/{params:.*}]', function (Request $request, Response $response) {
                 $endpoint = $request->getAttribute('endpoint');
                 if($this->has($endpoint)) {
-                    $data = $this->$endpoint->processReq($request);
+                    list($status,$data) = $this->$endpoint->processReq($request);
                 }
                 $newResponse = $response->withHeader('Content-type', 'application/json');
-                $newResponse = $response->withJson($data);
+                $newResponse = $response->withJson($data,$status);
                 return $newResponse;
             });
         }

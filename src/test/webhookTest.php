@@ -101,4 +101,25 @@
             $result = json_decode($response->getBody()->__toString(), true);
             $this->assertEquals('CHALLENGE_ACCEPTED',$result);
         }
+
+        public function testVerifyTokenFails()
+        {
+            $env = Environment::mock([
+                'REQUEST_METHOD' => 'GET',
+                'REQUEST_URI'    => '/webhook',
+                'QUERY_STRING' => 'hub.verify_token=12345&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe',
+                'CONTENT_TYPE'   => 'application/json',
+            ]);
+            $body = new RequestBody();
+            $req = Request::createFromEnvironment($env)->withBody($body);
+            $this->app->getContainer()['request'] = $req;//Include the Request in the App
+            $response = $this->app->run(TRUE);//TRUE is to hide body
+
+            //Test 1
+            $this->assertSame(403,$response->getStatusCode());
+
+            //Test 2
+            $result = json_decode($response->getBody()->__toString(), true);
+            $this->assertEquals(NULL,$result);
+        }
     }
